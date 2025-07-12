@@ -1,27 +1,27 @@
 'use strict';
 const path = require('path');
-const SizePlugin = require('size-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = () => ({
-	devtool: 'sourcemap',
+	devtool: 'source-map',
 	stats: 'errors-only',
 	entry: {
 		index: './src/index'
 	},
 	output: {
 		path: path.join(__dirname, 'dist'),
-		filename: '[name].js'
+		filename: '[name].js',
+		clean: true
 	},
 	module: {
 		rules: [{
-			test: /\.pug/,
+			test: /\.pug$/,
 			use: 'pug-loader'
 		},
 		{
-			test: /\.styl/,
+			test: /\.styl$/,
 			use: [
 				'style-loader',
 				'css-loader',
@@ -30,24 +30,27 @@ module.exports = () => ({
 		}]
 	},
 	plugins: [
-		new SizePlugin(),
-		new CopyWebpackPlugin([
-			{
-				context: './src',
-				from: '*',
-				ignore: '*.js'
-			},
-			{
-				from: 'src/static',
-				to: 'static'
-			},
-			{
-				from: 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'
-			},
-			{
-				from: 'node_modules/activate-power-mode/dist/activate-power-mode.js'
-			}
-		]),
+		new CopyWebpackPlugin({
+			patterns: [
+				{
+					context: './src',
+					from: '*',
+					globOptions: {
+						ignore: ['*.js']
+					}
+				},
+				{
+					from: 'src/static',
+					to: 'static'
+				},
+				{
+					from: 'node_modules/webextension-polyfill/dist/browser-polyfill.min.js'
+				},
+				{
+					from: 'node_modules/activate-power-mode/dist/activate-power-mode.js'
+				}
+			]
+		}),
 		new HtmlWebpackPlugin({
 			title: 'Markdown New Tab',
 			template: './src/pug/index.pug'
@@ -66,7 +69,7 @@ module.exports = () => ({
 					compress: false,
 					output: {
 						beautify: true,
-						indent_level: 2 // eslint-disable-line camelcase
+						indent_level: 2
 					}
 				}
 			})

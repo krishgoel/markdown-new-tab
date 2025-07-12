@@ -1,9 +1,9 @@
 {
 	"name": "Markdown New Tab",
 	"short_name": "Markdown New Tab",
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"description": "Take down notes 🗒️, save reminders ⏰, paste links 🔗, create checklists ☑️ all using markdown... directly in your New Tab!",
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"permissions": [
 		"storage"
 	],
@@ -16,9 +16,6 @@
 		"48": "static/icon/icon48.png",
 		"128": "static/icon/icon128.png"
 	},
-	"applications": {
-		"gecko": {
-			"id": "markdownnewtab@mihir.ch"
-		}
-	}
+	"action": {},
+	"host_permissions": []
 }

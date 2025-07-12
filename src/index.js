@@ -46,9 +46,21 @@ const syncStorageSet = async (name, value) => {
 	await localStorage.setItem(name, value);
 	const item = {};
 	item[name] = value;
-	if (browser.storage) {
-		await browser.storage.sync.set(item);
+	if (chrome.storage) {
+		await chrome.storage.sync.set(item);
 	}
+};
+
+/**
+ * Wrapper: localStorage.getItem
+ */
+const syncStorageGet = async (name) => {
+	const local = localStorage.getItem(name);
+	if (chrome.storage) {
+		const result = await chrome.storage.sync.get(name);
+		return result[name] || local;
+	}
+	return local;
 };
 
 /**
@@ -690,9 +702,9 @@ const initiate = async () => {
 	 * Browser Sync
 	 */
 
-	if (browser.storage) {
-		browser.storage.sync.get().then(items => {
-			if (!browser.runtime.error) {
+	if (chrome.storage) {
+		chrome.storage.sync.get().then(items => {
+			if (!chrome.runtime.error) {
 				for (const [key, value] of Object.entries(items)) {
 					localStorage.setItem(key, value);
 				}
